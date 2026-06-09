@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComplyAI — EU-Compliance für KMUs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --g:#1a9e6e;
+  --g2:#e6f7f1;
+  --g3:#0d5c3f;
+  --r:#d94f3d;
+  --ink:#0f0f0e;
+  --ink2:#3a3a38;
+  --ink3:#7a7a76;
+  --paper:#faf9f6;
+  --warm:#f3f1eb;
+  --border:rgba(15,15,14,0.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Syne',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;font-size:16px;font-weight:300;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 3rem;
+  background:rgba(250,249,246,0.94);
+  backdrop-filter:blur(10px);
+  border-bottom:.5px solid var(--border);
+}
+.logo{font-family:var(--serif);font-size:1.35rem;letter-spacing:-.02em;text-decoration:none;color:var(--ink)}
+.logo em{color:var(--g);font-style:italic}
+.nav-r{display:flex;align-items:center;gap:1.5rem}
+.lang-btn{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);background:none;border:.5px solid var(--border);padding:4px 12px;border-radius:20px;cursor:pointer;transition:all .15s}
+.lang-btn:hover{background:var(--warm)}
+.nav-cta{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:9px 22px;border-radius:2px;text-decoration:none;transition:background .2s}
+.nav-cta:hover{background:var(--g3)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  padding-top:0;
+  position:relative;overflow:hidden;
+}
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:5rem 3rem 5rem 3rem;
+  position:relative;z-index:1;
+}
+.hero-right{
+  display:flex;align-items:center;justify-content:center;
+  padding:5rem 3rem 5rem 2rem;
+  position:relative;z-index:1;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:50px 50px;
+  opacity:.5;
+}
+.eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--g);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--g)}
+h1{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.75rem);line-height:1.06;letter-spacing:-.025em;color:var(--ink);margin-bottom:1.5rem}
+h1 em{color:var(--g);font-style:italic}
+.hero-sub{font-size:1.05rem;color:var(--ink2);line-height:1.75;font-weight:300;margin-bottom:2.5rem;max-width:480px}
+.hero-stats{display:flex;gap:2.5rem;padding-top:1.75rem;border-top:.5px solid var(--border)}
+.stat-val{font-family:var(--serif);font-size:1.75rem;color:var(--ink);display:block;line-height:1}
+.stat-val .a{color:var(--g)}
+.stat-lbl{font-size:10px;color:var(--ink3);letter-spacing:.04em;margin-top:3px;display:block;line-height:1.35}
+
+/* ── QUIZ CARD ── */
+.quiz-card{
+  background:var(--paper);border:.5px solid var(--border);
+  border-radius:4px;width:100%;max-width:440px;
+  box-shadow:0 4px 40px rgba(15,15,14,.06);
+  overflow:hidden;
+}
+.quiz-header{
+  padding:1.25rem 1.5rem;border-bottom:.5px solid var(--border);
+  display:flex;align-items:center;gap:.75rem;
+}
+.quiz-dot{width:8px;height:8px;border-radius:50%;background:var(--g)}
+.quiz-title{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.quiz-progress{margin-left:auto;font-size:11px;color:var(--ink3)}
+.quiz-bar{height:2px;background:var(--border)}
+.quiz-bar-fill{height:2px;background:var(--g);transition:width .4s ease}
+.quiz-body{padding:1.75rem 1.5rem}
+.quiz-q{font-family:var(--serif);font-size:1.2rem;line-height:1.3;color:var(--ink);margin-bottom:1.25rem}
+.quiz-opts{display:flex;flex-direction:column;gap:.5rem}
+.quiz-opt{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.75rem 1rem;border:.5px solid var(--border);
+  background:var(--paper);cursor:pointer;
+  font-size:.9rem;color:var(--ink2);
+  transition:all .15s;border-radius:2px;
+  text-align:left;font-family:var(--sans);font-weight:400;
+}
+.quiz-opt:hover{background:var(--g2);border-color:var(--g)}
+.quiz-opt.selected{background:var(--g2);border-color:var(--g);color:var(--g3);font-weight:500}
+.quiz-opt-icon{width:28px;height:28px;border:.5px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--warm)}
+.quiz-next{
+  margin-top:1.25rem;width:100%;
+  background:var(--ink);color:var(--paper);
+  border:none;padding:.875rem;
+  font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;border-radius:2px;transition:background .2s;
+  display:none;
+}
+.quiz-next:hover{background:var(--g3)}
+.quiz-next.visible{display:block}
+.quiz-footer{padding:.875rem 1.5rem;border-top:.5px solid var(--border);font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.quiz-lock{color:var(--g);font-size:13px}
+
+/* QUIZ RESULT */
+.quiz-result{padding:1.75rem 1.5rem;display:none}
+.result-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin-bottom:.75rem}
+.result-title{font-family:var(--serif);font-size:1.15rem;color:var(--ink);margin-bottom:1.25rem;line-height:1.3}
+.result-items{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem}
+.result-item{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem;background:var(--warm);border-radius:2px}
+.result-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.result-dot.red{background:#d94f3d}
+.result-dot.yellow{background:#e6a817}
+.result-dot.green{background:var(--g)}
+.result-item p{font-size:.825rem;color:var(--ink2);line-height:1.5}
+.result-item strong{color:var(--ink);font-weight:500}
+.result-cta{width:100%;background:var(--g);color:white;border:none;padding:1rem;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:background .2s}
+.result-cta:hover{background:var(--g3)}
+.result-note{font-size:11px;color:var(--ink3);text-align:center;margin-top:.75rem;line-height:1.5}
+
+/* ── SECTIONS ── */
+section{padding:6rem 3rem}
+section.alt{background:var(--warm)}
+.sec-ey{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.sec-ey::before{content:'';display:block;width:16px;height:1px;background:var(--g)}
+h2{font-family:var(--serif);font-size:clamp(1.9rem,3.5vw,2.75rem);letter-spacing:-.02em;line-height:1.1;margin-bottom:.75rem;color:var(--ink)}
+h2 em{color:var(--g);font-style:italic}
+.sec-lead{font-size:1rem;color:var(--ink3);line-height:1.7;max-width:560px;margin-bottom:3rem}
+
+/* HOW IT WORKS */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.how-card{padding:2rem;border:.5px solid var(--border);background:var(--paper);position:relative}
+.how-num{font-family:var(--serif);font-size:3.5rem;color:rgba(26,158,110,.12);line-height:1;margin-bottom:1.25rem}
+.how-card h3{font-size:.95rem;font-weight:500;margin-bottom:.5rem}
+.how-card p{font-size:.875rem;color:var(--ink3);line-height:1.65}
+.how-conn{position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:32px;height:32px;background:var(--paper);border:.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g);z-index:2}
+
+/* TRUST */
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.trust-block{background:var(--paper);padding:2rem 1.75rem}
+.trust-icon{font-size:1.4rem;color:var(--g);margin-bottom:.875rem}
+.trust-block h3{font-size:.9rem;font-weight:500;margin-bottom:.4rem}
+.trust-block p{font-size:.825rem;color:var(--ink3);line-height:1.6}
+.trust-note{margin-top:2rem;padding:1.25rem 1.5rem;background:var(--g2);border-left:3px solid var(--g);font-size:.9rem;color:var(--g3);font-family:var(--serif);font-style:italic}
+
+/* COMPARISON */
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+.vs-card{padding:2rem;border:.5px solid var(--border)}
+.vs-card.theirs{border-top:3px solid var(--r);background:var(--paper)}
+.vs-card.ours{border-top:3px solid var(--g);background:var(--paper)}
+.vs-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
+.vs-card.theirs .vs-label{color:var(--r)}
+.vs-card.ours .vs-label{color:var(--g)}
+.vs-name{font-family:var(--serif);font-size:1.35rem;margin-bottom:1rem;line-height:1.2}
+.vs-items{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.vs-items li{font-size:.875rem;color:var(--ink2);display:flex;gap:.75rem;align-items:flex-start;line-height:1.5}
+.vs-x{color:var(--r);flex-shrink:0;font-weight:600}
+.vs-c{color:var(--g);flex-shrink:0;font-weight:600}
+.vs-note{background:var(--ink);color:var(--paper);padding:1.5rem 2rem;font-size:.9rem;line-height:1.7}
+.vs-note strong{color:#a8e6cf}
+
+/* WAITLIST */
+.wl-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.wl-left h2{margin-bottom:.75rem}
+.wl-left p{font-size:1rem;color:var(--ink2);line-height:1.75;margin-bottom:0}
+.wl-form{background:var(--paper);border:.5px solid var(--border);padding:2rem}
+.wl-field{margin-bottom:1rem}
+.wl-field label{display:block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:.4rem}
+.wl-field input,.wl-field select{
+  width:100%;padding:.75rem 1rem;border:.5px solid var(--border);background:var(--warm);
+  font-family:var(--sans);font-size:.9rem;color:var(--ink);border-radius:2px;
+  transition:border-color .15s;outline:none;
+}
+.wl-field input:focus,.wl-field select:focus{border-color:var(--g)}
+.wl-price-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.25rem}
+.price-opt{
+  padding:.6rem .5rem;border:.5px solid var(--border);background:var(--warm);
+  cursor:pointer;font-size:.825rem;font-family:var(--sans);color:var(--ink2);
+  border-radius:2px;transition:all .15s;text-align:center;
+}
+.price-opt:hover{background:var(--g2);border-color:var(--g)}
+.price-opt.sel{background:var(--g2);border-color:var(--g);color:var(--g3);font-weight:500}
+.wl-submit{
+  width:100%;background:var(--g);color:white;border:none;
+  padding:1rem;font-family:var(--sans);font-size:13px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:2px;
+  transition:background .2s;margin-top:.25rem;
+}
+.wl-submit:hover{background:var(--g3)}
+.wl-disclaimer{font-size:11px;color:var(--ink3);margin-top:.875rem;line-height:1.5}
+.wl-success{display:none;text-align:center;padding:2rem 1rem}
+.wl-success-icon{font-size:2rem;color:var(--g);margin-bottom:.75rem}
+.wl-success h3{font-family:var(--serif);font-size:1.3rem;margin-bottom:.5rem}
+.wl-success p{font-size:.9rem;color:var(--ink3);line-height:1.65}
+
+/* EXIT / MOAT */
+.moat-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.moat-left{padding:6rem 3rem;background:var(--ink);color:var(--paper)}
+.moat-left .sec-ey{color:var(--g)}
+.moat-left .sec-ey::before{background:var(--g)}
+.moat-left h2{color:var(--paper)}
+.moat-right{padding:6rem 3rem;background:var(--ink2)}
+.moat-list{list-style:none;display:flex;flex-direction:column;gap:0;margin-top:2rem}
+.moat-item{display:flex;gap:1.25rem;padding:1.25rem 0;border-bottom:.5px solid rgba(250,249,246,.1)}
+.moat-item:first-child{border-top:.5px solid rgba(250,249,246,.1)}
+.moat-n{font-family:var(--serif);font-size:1.5rem;color:rgba(26,158,110,.4);flex-shrink:0;line-height:1}
+.moat-item h3{font-size:.875rem;font-weight:500;color:var(--paper);margin-bottom:.25rem}
+.moat-item p{font-size:.825rem;color:rgba(250,249,246,.55);line-height:1.6}
+.exit-content{color:rgba(250,249,246,.7)}
+.exit-content p{font-size:.9rem;line-height:1.75;margin-bottom:1.25rem}
+.exit-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+.exit-chip{font-size:11px;font-weight:500;letter-spacing:.05em;border:.5px solid rgba(250,249,246,.2);padding:5px 14px;color:rgba(250,249,246,.6)}
+
+/* FOOTER */
+footer{padding:2.5rem 3rem;border-top:.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--paper)}
+.footer-logo{font-family:var(--serif);font-size:1.1rem;text-decoration:none;color:var(--ink)}
+.footer-logo em{color:var(--g);font-style:italic}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{font-size:12px;color:var(--ink3);text-decoration:none;letter-spacing:.03em}
+.footer-links a:hover{color:var(--ink)}
+.footer-r{font-size:11px;color:var(--ink3)}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.fi.in{opacity:1;transform:translateY(0)}
+
+/* LANGUAGE */
+.en{display:none}
+body.lang-en .de{display:none}
+body.lang-en .en{display:block}
+body.lang-en .en-flex{display:flex}
+body.lang-en .de-flex{display:none}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:1rem 1.25rem}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-left{padding:3.5rem 1.25rem 2rem}
+  .hero-right{padding:0 1.25rem 3.5rem}
+  section{padding:3.5rem 1.25rem}
+  .how-grid,.vs-grid,.wl-wrap,.trust-grid,.moat-wrap{grid-template-columns:1fr}
+  .moat-left,.moat-right{padding:3.5rem 1.25rem}
+  .hero-stats{gap:1.5rem;flex-wrap:wrap}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.25rem}
+  .footer-links{flex-wrap:wrap;justify-content:center}
+  .how-conn{display:none}
+  .nav-r .nav-cta{padding:8px 14px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Comply<em>AI</em></a>
+  <div class="nav-r">
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+    <a href="#waitlist" class="nav-cta de">Kostenlos prüfen</a>
+    <a href="#waitlist" class="nav-cta en" style="display:none">Get early access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid-bg"></div>
+
+  <div class="hero-left">
+    <p class="eyebrow de">B2B SaaS · DACH · EU Compliance</p>
+    <p class="eyebrow en">B2B SaaS · DACH · EU Compliance</p>
+
+    <h1 class="de">EU-Compliance —<br><em>endlich</em><br>verstehen.</h1>
+    <h1 class="en">EU Compliance —<br><em>finally</em><br>make sense of it.</h1>
+
+    <p class="hero-sub de">Kein Anwalt, kein Berater, keine Überraschungen. ComplyAI zeigt dir in Minuten, welche Gesetze für dein Unternehmen gelten — und was du wirklich tun musst.</p>
+    <p class="hero-sub en">No lawyer, no consultant, no nasty surprises. ComplyAI shows you in minutes which EU regulations apply to your business — and exactly what to do about them.</p>
+
+    <div class="hero-stats">
+      <div>
+        <span class="stat-val">3,5<span class="a">M</span></span>
+        <span class="stat-lbl de">KMUs in DACH betroffen</span>
+        <span class="stat-lbl en">SMEs affected in DACH</span>
+      </div>
+      <div>
+        <span class="stat-val">3<span class="a">+</span></span>
+        <span class="stat-lbl de">neue EU-Gesetze seit 2024</span>
+        <span class="stat-lbl en">new EU laws since 2024</span>
+      </div>
+      <div>
+        <span class="stat-val">€<span class="a">0</span></span>
+        <span class="stat-lbl de">einfache KMU-Lösung bisher</span>
+        <span class="stat-lbl en">simple SME solution exists</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- QUIZ CARD -->
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-header">
+        <div class="quiz-dot"></div>
+        <span class="quiz-title de">Schnell-Check · 4 Fragen</span>
+        <span class="quiz-title en" style="display:none">Quick Check · 4 Questions</span>
+        <span class="quiz-progress" id="quizProgress">1 / 4</span>
+      </div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" id="quizFill" style="width:25%"></div></div>
+
+      <div class="quiz-body" id="quizBody">
+        <!-- Steps injected by JS -->
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <p class="result-label de">Dein Beispiel-Ergebnis</p>
+        <p class="result-label en" style="display:none">Your Sample Result</p>
+        <p class="result-title de">3 Bereiche für dein Unternehmen identifiziert</p>
+        <p class="result-title en" style="display:none">3 areas identified for your business</p>
+        <div class="result-items" id="resultItems"></div>
+        <button class="result-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">
+          <span class="de">Vollständige Analyse starten →</span>
+          <span class="en">Get full analysis →</span>
+        </button>
+        <p class="result-note de">Dies ist ein Beispiel. Die vollständige Analyse startet nach der Registrierung.</p>
+        <p class="result-note en">This is a sample. Full analysis available after sign-up.</p>
+      </div>
+
+      <div class="quiz-footer">
+        <span class="quiz-lock">🔒</span>
+        <span class="de">Keine sensiblen Daten · DSGVO-konform</span>
+        <span class="en">No sensitive data · GDPR-compliant</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="alt" id="produkt">
+  <div class="sec-ey de">So funktioniert es</div>
+  <div class="sec-ey en">How it works</div>
+  <h2 class="de">Drei Schritte zu <em>klarer</em> Compliance.</h2>
+  <h2 class="en">Three steps to <em>clear</em> compliance.</h2>
+  <p class="sec-lead de">Von der Eingabe bis zum fertigen Dokument — ohne Anwalt, ohne Überraschungen.</p>
+  <p class="sec-lead en">From input to finished document — no lawyer, no surprises.</p>
+  <div class="how-grid fi">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <h3 class="de">Unternehmen beschreiben</h3>
+      <h3 class="en">Describe your business</h3>
+      <p class="de">Branche, Größe, Tätigkeitsfeld — in strukturierten Feldern, keine sensiblen Daten nötig. Dauert zwei Minuten.</p>
+      <p class="en">Industry, size, activity — in structured fields, no sensitive data required. Takes two minutes.</p>
+      <div class="how-conn">→</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <h3 class="de">Lücken sehen</h3>
+      <h3 class="en">See the gaps</h3>
+      <p class="de">Das Ampel-Dashboard zeigt welche Pflichten offen sind, welche Fristen laufen und wo das größte Risiko liegt.</p>
+      <p class="en">The traffic light dashboard shows open obligations, running deadlines and where the biggest risk lies.</p>
+      <div class="how-conn">→</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <h3 class="de">Dokumente generieren</h3>
+      <h3 class="en">Generate documents</h3>
+      <p class="de">Per Klick: Datenschutzerklärung, AVV-Vorlage, AI Act Konformitätsdokument — branchenspezifisch, sofort verwendbar.</p>
+      <p class="en">One click: Privacy policy, DPA template, AI Act conformity document — industry-specific, ready to use.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST / DATENSCHUTZ -->
+<section id="datenschutz">
+  <div class="sec-ey de">Datenschutz</div>
+  <div class="sec-ey en">Privacy</div>
+  <h2 class="de">DSGVO-konform <em>by design.</em></h2>
+  <h2 class="en">GDPR-compliant <em>by design.</em></h2>
+  <p class="sec-lead de">Eine Compliance-Plattform die selbst nicht compliant ist — das wäre absurd. Drei Architekturentscheidungen die das garantieren.</p>
+  <p class="sec-lead en">A compliance platform that isn't compliant itself — that would be absurd. Three architectural decisions that guarantee it.</p>
+  <div class="trust-grid fi">
+    <div class="trust-block">
+      <div class="trust-icon">◎</div>
+      <h3 class="de">Keine sensiblen Daten nötig</h3>
+      <h3 class="en">No sensitive data required</h3>
+      <p class="de">Der Kern arbeitet mit Branche, Größe und Tätigkeitsfeld — Dropdowns und Checkboxen, kein Freitext, keine personenbezogenen Daten.</p>
+      <p class="en">The core works with industry, size and activity — dropdowns and checkboxes, no free text, no personal data.</p>
+    </div>
+    <div class="trust-block">
+      <div class="trust-icon">◉</div>
+      <h3 class="de">Data Processing Agreement</h3>
+      <h3 class="en">Data Processing Agreement</h3>
+      <p class="de">DPA mit KI-Anbieter gemäß Art. 28 DSGVO, EU-US Data Privacy Framework — jede Verarbeitung ist rechtlich vollständig abgesichert.</p>
+      <p class="en">DPA with AI provider under Art. 28 GDPR, EU-US Data Privacy Framework — every processing step is legally covered.</p>
+    </div>
+    <div class="trust-block">
+      <div class="trust-icon">⬡</div>
+      <h3 class="de">Hinweis, keine Rechtsberatung</h3>
+      <h3 class="en">Guidance, not legal advice</h3>
+      <p class="de">ComplyAI zeigt dir was du prüfen musst — nicht ob du compliant bist. Die Haftung bleibt bei dir. Das ist ehrlich und das sagen wir auch so.</p>
+      <p class="en">ComplyAI shows you what to check — not whether you're compliant. Liability stays with you. We're honest about that.</p>
+    </div>
+  </div>
+  <div class="trust-note fi de">"DSGVO-konform by design ist kein Hindernis — es ist unser stärkstes Verkaufsargument."</div>
+  <div class="trust-note fi en">"GDPR-compliant by design isn't a constraint — it's our strongest selling point."</div>
+</section>
+
+<!-- COMPARISON -->
+<section class="alt" id="vergleich">
+  <div class="sec-ey de">Wettbewerb</div>
+  <div class="sec-ey en">Comparison</div>
+  <h2 class="de">Warum nicht einfach <em>einen Berater</em>?</h2>
+  <h2 class="en">Why not just hire <em>a consultant</em>?</h2>
+  <p class="sec-lead de">DataGuard und heyData existieren — aber beide sind entweder zu teuer oder zu komplex für den echten Mittelstand.</p>
+  <p class="sec-lead en">DataGuard and heyData exist — but both are either too expensive or too complex for real SMEs.</p>
+  <div class="vs-grid fi">
+    <div class="vs-card theirs">
+      <p class="vs-label de">Bestehende Lösungen</p>
+      <p class="vs-label en">Existing solutions</p>
+      <p class="vs-name de">DataGuard, heyData & Co.</p>
+      <p class="vs-name en">DataGuard, heyData & others</p>
+      <ul class="vs-items">
+        <li><span class="vs-x">✕</span><span class="de">Ab €500/Monat — zu teuer für KMUs unter 50 Mitarbeitern</span><span class="en">From €500/month — too expensive for SMEs under 50 employees</span></li>
+        <li><span class="vs-x">✕</span><span class="de">Berater nötig — kein echtes Self-Service</span><span class="en">Consultant required — not true self-service</span></li>
+        <li><span class="vs-x">✕</span><span class="de">Fokus auf DSGVO und NIS2 — AI Act kaum abgedeckt</span><span class="en">Focus on GDPR and NIS2 — AI Act barely covered</span></li>
+        <li><span class="vs-x">✕</span><span class="de">Kein Dokument-Generator für spezifische Rechtsformen</span><span class="en">No document generator for specific legal forms</span></li>
+      </ul>
+    </div>
+    <div class="vs-card ours">
+      <p class="vs-label">ComplyAI</p>
+      <p class="vs-name de">Gemacht für den echten Mittelstand.</p>
+      <p class="vs-name en">Built for real SMEs.</p>
+      <ul class="vs-items">
+        <li><span class="vs-c">✓</span><span class="de">Self-Service — kein Berater, keine Wartezeit</span><span class="en">Self-service — no consultant, no waiting</span></li>
+        <li><span class="vs-c">✓</span><span class="de">DSGVO + AI Act + HGB in einem Tool</span><span class="en">GDPR + AI Act + disclosure obligations in one tool</span></li>
+        <li><span class="vs-c">✓</span><span class="de">Dokument-Generator: sofort verwendbar, branchenspezifisch</span><span class="en">Document generator: ready to use, industry-specific</span></li>
+        <li><span class="vs-c">✓</span><span class="de">Erschwinglich — für jedes KMU</span><span class="en">Affordable — for every SME</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="vs-note fi de"><strong>Das eigentliche Argument:</strong> Die meisten KMUs haben gar keinen Compliance-Beauftragten. Sie können sich keinen leisten. ComplyAI gibt ihnen zum ersten Mal eine funktionierende Compliance-Struktur — ohne Stundensatz.</div>
+  <div class="vs-note fi en"><strong>The real argument:</strong> Most SMEs don't have a compliance officer. They can't afford one. ComplyAI gives them a working compliance structure for the first time — without hourly rates.</div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist">
+  <div class="wl-wrap">
+    <div class="wl-left fi">
+      <div class="sec-ey de">Early Access</div>
+      <div class="sec-ey en">Early Access</div>
+      <h2 class="de">Sei einer der <em>Ersten.</em></h2>
+      <h2 class="en">Be one of the <em>first.</em></h2>
+      <p class="de" style="font-size:1rem;color:var(--ink2);line-height:1.75;margin-top:.5rem">ComplyAI ist in Entwicklung. Trag dich ein und erhalte als Erster Zugang — inklusive 3 Monate kostenlos für Early-Access-Mitglieder.</p>
+      <p class="en" style="font-size:1rem;color:var(--ink2);line-height:1.75;margin-top:.5rem">ComplyAI is in development. Sign up to get first access — including 3 months free for early access members.</p>
+    </div>
+    <div class="wl-right fi">
+      <div class="wl-form" id="wlForm">
+        <div class="wl-field">
+          <label class="de">E-Mail-Adresse</label>
+          <label class="en">Email address</label>
+          <input type="email" id="wlEmail" placeholder="max@unternehmen.de" />
+        </div>
+        <div class="wl-field">
+          <label class="de">Unternehmensgröße</label>
+          <label class="en">Company size</label>
+          <select id="wlSize">
+            <option value="" class="de">Bitte wählen…</option>
+            <option value="" class="en">Please select…</option>
+            <option value="1-9" class="de">1–9 Mitarbeiter</option>
+            <option value="1-9" class="en">1–9 employees</option>
+            <option value="10-49" class="de">10–49 Mitarbeiter</option>
+            <option value="10-49" class="en">10–49 employees</option>
+            <option value="50-249" class="de">50–249 Mitarbeiter</option>
+            <option value="50-249" class="en">50–249 employees</option>
+            <option value="250+" class="de">250+ Mitarbeiter</option>
+            <option value="250+" class="en">250+ employees</option>
+          </select>
+        </div>
+        <div class="wl-field">
+          <label class="de">Was wäre dir ein solches Tool wert? (monatlich)</label>
+          <label class="en">What would this tool be worth to you? (monthly)</label>
+          <div class="wl-price-opts">
+            <button class="price-opt" onclick="selectPrice(this,'€49/Mo.')">€49 / Mo.</button>
+            <button class="price-opt" onclick="selectPrice(this,'€99/Mo.')">€99 / Mo.</button>
+            <button class="price-opt" onclick="selectPrice(this,'€149/Mo.')">€149 / Mo.</button>
+          </div>
+        </div>
+        <button class="wl-submit" onclick="submitWaitlist()">
+          <span class="de">Jetzt eintragen →</span>
+          <span class="en">Join waitlist →</span>
+        </button>
+        <p class="wl-disclaimer de">Kein Spam. Kein Abo. Nur eine Nachricht wenn wir live gehen.</p>
+        <p class="wl-disclaimer en">No spam. No subscription. Just one message when we go live.</p>
+      </div>
+      <div class="wl-success" id="wlSuccess">
+        <div class="wl-success-icon">✓</div>
+        <h3 class="de">Du bist dabei.</h3>
+        <h3 class="en">You're in.</h3>
+        <p class="de">Wir melden uns sobald ComplyAI live geht. Du erhältst als Early-Access-Mitglied 3 Monate kostenlos.</p>
+        <p class="en">We'll reach out as soon as ComplyAI goes live. As an early access member you get 3 months free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOAT + EXIT -->
+<div class="moat-wrap">
+  <div class="moat-left">
+    <div class="sec-ey de">Wettbewerbsvorteil</div>
+    <div class="sec-ey en">Competitive advantage</div>
+    <h2 class="de">Warum ComplyAI<br><em>nicht kopierbar</em> ist.</h2>
+    <h2 class="en">Why ComplyAI<br><em>can't be copied.</em></h2>
+    <ul class="moat-list">
+      <li class="moat-item">
+        <span class="moat-n">01</span>
+        <div>
+          <h3 class="de">Compliance-Datenbank</h3>
+          <h3 class="en">Compliance database</h3>
+          <p class="de">Strukturiertes Mapping von Gesetzen auf Unternehmenstypen — das Kernasset, nicht in einem Monat nachbaubar.</p>
+          <p class="en">Structured mapping of laws to business types — the core asset, not replicable in a month.</p>
+        </div>
+      </li>
+      <li class="moat-item">
+        <span class="moat-n">02</span>
+        <div>
+          <h3 class="de">Wechselkosten</h3>
+          <h3 class="en">Switching costs</h3>
+          <p class="de">Compliance-Historie lebt im System. Je länger ein Kunde bleibt, desto wertvoller wird das Produkt für ihn.</p>
+          <p class="en">Compliance history lives in the system. The longer a customer stays, the more valuable the product becomes.</p>
+        </div>
+      </li>
+      <li class="moat-item">
+        <span class="moat-n">03</span>
+        <div>
+          <h3 class="de">First-Mover KMU-Segment</h3>
+          <h3 class="en">First-mover in SME segment</h3>
+          <p class="de">Enterprise ist besetzt. Das KMU-Segment ist strukturell unbesetzt — wer zuerst Distribution aufbaut, gewinnt.</p>
+          <p class="en">Enterprise is taken. The SME segment is structurally open — whoever builds distribution first wins.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="moat-right">
+    <div class="sec-ey de" style="color:var(--g)">Exit-Szenario</div>
+    <div class="sec-ey en" style="color:var(--g)">Exit scenario</div>
+    <h2 class="de" style="color:var(--paper)">Strategische <em>Akquisition</em><br>in Jahr 4–6.</h2>
+    <h2 class="en" style="color:var(--paper)">Strategic <em>acquisition</em><br>in year 4–6.</h2>
+    <div class="exit-content" style="margin-top:1.5rem">
+      <p class="de">Natürliche Käufer haben große KMU-Kundenstämme aber kein Compliance-Produkt. ComplyAI wird die fehlende Komponente — kein Exit ins Nichts.</p>
+      <p class="en">Natural buyers have large SME client bases but no compliance product. ComplyAI becomes the missing piece — not an exit into the void.</p>
+      <p class="de" style="font-size:.825rem">Vergleichbare RegTech-Exits: 5–15× ARR.</p>
+      <p class="en" style="font-size:.825rem">Comparable RegTech exits: 5–15× ARR.</p>
+      <div class="exit-chips">
+        <span class="exit-chip">SAP</span>
+        <span class="exit-chip">DATEV</span>
+        <span class="exit-chip">Wolters Kluwer</span>
+        <span class="exit-chip">Lexware</span>
+        <span class="exit-chip">Haufe Group</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Comply<em>AI</em></a>
+  <div class="footer-links">
+    <a href="#" class="de">Impressum</a>
+    <a href="#" class="en">Legal Notice</a>
+    <a href="#" class="de">Datenschutz</a>
+    <a href="#" class="en">Privacy Policy</a>
+    <a href="mailto:hello@complyai.com">hello@complyai.com</a>
+  </div>
+  <p class="footer-r de">© 2026 ComplyAI · Wien</p>
+  <p class="footer-r en">© 2026 ComplyAI · Vienna</p>
+</footer>
+
+<script>
+// ── LANGUAGE TOGGLE ──
+let lang = 'de';
+function toggleLang(){
+  lang = lang==='de'?'en':'de';
+  document.body.classList.toggle('lang-en', lang==='en');
+  document.getElementById('langBtn').textContent = lang==='de'?'EN':'DE';
+  renderStep();
+}
+
+// ── QUIZ ──
+const steps = {
+  de:[
+    {q:"Wie viele Mitarbeiter hat dein Unternehmen?",opts:[{i:"👤",t:"1–9"},{i:"👥",t:"10–49"},{i:"🏢",t:"50–249"},{i:"🏭",t:"250+"}]},
+    {q:"In welcher Branche bist du tätig?",opts:[{i:"💻",t:"Tech / SaaS"},{i:"🛒",t:"Handel / E-Commerce"},{i:"🏥",t:"Gesundheit / Pharma"},{i:"⚙️",t:"Sonstiges"}]},
+    {q:"Nutzt du KI-Tools in deinem Unternehmen?",opts:[{i:"✅",t:"Ja, regelmäßig"},{i:"🔄",t:"Manchmal"},{i:"❌",t:"Nein"}]},
+    {q:"Hast du eine aktuelle Datenschutzerklärung?",opts:[{i:"✅",t:"Ja, aktuell"},{i:"⚠️",t:"Unsicher"},{i:"❌",t:"Nein / Veraltet"}]},
+  ],
+  en:[
+    {q:"How many employees does your company have?",opts:[{i:"👤",t:"1–9"},{i:"👥",t:"10–49"},{i:"🏢",t:"50–249"},{i:"🏭",t:"250+"}]},
+    {q:"What industry are you in?",opts:[{i:"💻",t:"Tech / SaaS"},{i:"🛒",t:"Retail / E-Commerce"},{i:"🏥",t:"Health / Pharma"},{i:"⚙️",t:"Other"}]},
+    {q:"Do you use AI tools in your business?",opts:[{i:"✅",t:"Yes, regularly"},{i:"🔄",t:"Sometimes"},{i:"❌",t:"No"}]},
+    {q:"Do you have an up-to-date privacy policy?",opts:[{i:"✅",t:"Yes, current"},{i:"⚠️",t:"Not sure"},{i:"❌",t:"No / Outdated"}]},
+  ]
+};
+
+const results = {
+  de:[
+    {c:"red",t:"<strong>DSGVO-Pflichten</strong> — Datenschutzerklärung prüfen, AVV mit Dienstleistern überprüfen"},
+    {c:"yellow",t:"<strong>AI Act (Art. 4)</strong> — KI-Kompetenznachweis für Mitarbeiter erforderlich seit Feb. 2025"},
+    {c:"green",t:"<strong>HGB §325</strong> — Offenlegungspflicht prüfen je nach Rechtsform und Größe"},
+  ],
+  en:[
+    {c:"red",t:"<strong>GDPR obligations</strong> — Review privacy policy, check DPAs with service providers"},
+    {c:"yellow",t:"<strong>AI Act (Art. 4)</strong> — AI literacy requirement for employees mandatory since Feb. 2025"},
+    {c:"green",t:"<strong>Disclosure obligations</strong> — Check annual report filing based on legal form and size"},
+  ]
+};
+
+let cur=0;let sel=null;
+function renderStep(){
+  const s=steps[lang][cur];
+  const body=document.getElementById('quizBody');
+  const fill=document.getElementById('quizFill');
+  const prog=document.getElementById('quizProgress');
+  fill.style.width=((cur+1)/4*100)+'%';
+  prog.textContent=(cur+1)+' / 4';
+  body.innerHTML=`
+    <p class="quiz-q">${s.q}</p>
+    <div class="quiz-opts">
+      ${s.opts.map((o,i)=>`<button class="quiz-opt" onclick="selectOpt(this,${i})"><span class="quiz-opt-icon">${o.i}</span>${o.t}</button>`).join('')}
+    </div>
+    <button class="quiz-next" id="nextBtn" onclick="nextStep()">${lang==='de'?'Weiter →':'Next →'}</button>
+  `;
+  sel=null;
+}
+
+function selectOpt(el,i){
+  document.querySelectorAll('.quiz-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  sel=i;
+  document.getElementById('nextBtn').classList.add('visible');
+}
+
+function nextStep(){
+  if(sel===null)return;
+  if(cur<3){cur++;renderStep();}
+  else{showResult();}
+}
+
+function showResult(){
+  document.getElementById('quizBody').style.display='none';
+  document.querySelector('.quiz-header').style.display='none';
+  document.querySelector('.quiz-bar').style.display='none';
+  const r=document.getElementById('quizResult');
+  r.style.display='block';
+  const ri=document.getElementById('resultItems');
+  ri.innerHTML=results[lang].map(x=>`
+    <div class="result-item">
+      <div class="result-dot ${x.c}"></div>
+      <p>${x.t}</p>
+    </div>
+  `).join('');
+  // re-apply language
+  r.querySelectorAll('.de,.en').forEach(el=>{
+    el.style.display=(el.classList.contains(lang))?'block':'none';
+  });
+}
+
+// ── WAITLIST ──
+let selPrice='';
+function selectPrice(el,p){
+  document.querySelectorAll('.price-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');selPrice=p;
+}
+function submitWaitlist(){
+  const email=document.getElementById('wlEmail').value;
+  if(!email||!email.includes('@'))return;
+  document.getElementById('wlForm').style.display='none';
+  document.getElementById('wlSuccess').style.display='block';
+}
+
+// ── FADE IN ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+// INIT
+renderStep();
+</script>
+</body>
+</html>
